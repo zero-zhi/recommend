@@ -91,13 +91,19 @@ def recommendContent(path, db="recommend_sys_db"):
         print("正在搜索并推荐相似文章，请稍等...")
         li = []
         for r in results_all:
-            with open(path, 'r', encoding='utf-8') as f:
-                compareContent = f.read()
-            s1 = simHash(compareContent)
-            s2 = simHash(r[3])
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    compareContent = f.read()
+            except Exception:
+                print("请输入正确路径！")
+            try:
+                s1 = simHash(compareContent)
+                s2 = simHash(r[3])
+            except Exception as e:
+                print("请将stopwords.txt文件放在  " + str(e)[28:] + "路径下！")
+                break
             dis = getDistance(s1, s2)
             li.append(dis)
-
         a, b = [], []
         for x, y in enumerate(li):
             a.append((x, y))
